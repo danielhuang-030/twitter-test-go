@@ -3,6 +3,7 @@ package main
 import (
 	"app/controller"
 	_ "app/init"
+	_ "app/model"
 
 	"os"
 

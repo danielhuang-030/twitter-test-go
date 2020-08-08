@@ -1,10 +1,15 @@
 package init
 
 import (
+	"log"
+
 	"github.com/joho/godotenv"
 )
 
 func init() {
-	// set timezone
-	godotenv.Load()
+	// load godotenv
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
