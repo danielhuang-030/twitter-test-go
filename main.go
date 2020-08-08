@@ -1,25 +1,18 @@
 package main
 
 import (
-	"net/http"
+	"app/controller"
+	_ "app/init"
+
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
 	router := gin.Default()
 	api := router.Group("/api")
-	api.GET("/", index)
+	api.GET("/", controller.Index)
 
-	godotenv.Load()
 	router.Run(":" + os.Getenv("APP_PORT"))
-}
-
-func index(c *gin.Context) {
-	statusCode := http.StatusOK
-	c.JSON(statusCode, gin.H{
-		"data": "Hello, GIN",
-	})
 }
