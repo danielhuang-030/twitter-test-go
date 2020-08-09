@@ -10,17 +10,27 @@ import (
 )
 
 type Model struct {
-	ID        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	CreatedAt time.Time `json:"created_at" gorm:"type:datetime"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"type:datetime"`
 }
 
-func init() {
+var db *gorm.DB
+
+func ConnectDb() {
+	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", os.Getenv("DB_USERNAME"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_DATABASE"))
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
 
 	db.AutoMigrate(&User{})
+}
+
+func GetDb() *gorm.DB {
+	if db == nil {
+		ConnectDb()
+	}
+	return db
 }
