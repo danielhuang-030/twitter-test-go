@@ -18,9 +18,6 @@ git clone https://github.com/danielhuang-030/twitter-test-go.git
 cp .env.example .env
 vi .env
 
-# db migrate
-php artisan migrate
-
 # go build
 go build
 

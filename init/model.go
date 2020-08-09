@@ -5,5 +5,6 @@ import (
 )
 
 func init() {
+	// connect DB
 	model.ConnectDb()
 }
