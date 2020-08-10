@@ -14,5 +14,6 @@ func main() {
 	api.GET("/", controller.Index)
 	api.POST("/signup", controller.Signup)
 	api.POST("/login", controller.Login)
+	api.GET("/users/:id/info", controller.UserInfo)
 	router.Run(":" + os.Getenv("APP_PORT"))
 }

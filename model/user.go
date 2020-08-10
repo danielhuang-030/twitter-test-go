@@ -1,7 +1,5 @@
 package model
 
-import "errors"
-
 type User struct {
 	Model
 	Name     string `json:"name" gorm:"size:255;index"`
@@ -19,14 +17,20 @@ func CreateUser(data map[string]interface{}) (user User, err error) {
 	if err = db.Create(&user).Error; err != nil {
 		return
 	}
-	return user, err
+	return
 }
 
 func GetUserByEmail(email string) (user User, err error) {
-	user = User{}
-	db.Where("email = ?", email).First(&user)
-	if 0 == int(user.ID) {
-		err = errors.New("The user is not exist")
+	if err = db.Where("email = ?", email).First(&user).Error; err != nil {
+		return
+	}
+
+	return
+}
+
+func FindUser(id int) (user User, err error) {
+	if err = db.First(&user, id).Error; err != nil {
+		return
 	}
 
 	return
