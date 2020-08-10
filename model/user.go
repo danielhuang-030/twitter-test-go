@@ -5,7 +5,6 @@ type User struct {
 	Name     string `json:"name" gorm:"size:255;index"`
 	Email    string `json:"email" gorm:"size:255;uniqueIndex"`
 	Password string `json:"-" gorm:"size:255"`
-	Token    string `json:"token" gorm:"size:255"`
 }
 
 func CreateUser(data map[string]interface{}) (user User, err error) {

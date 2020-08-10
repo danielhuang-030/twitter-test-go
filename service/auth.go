@@ -2,9 +2,15 @@ package service
 
 import (
 	model "app/model"
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"log"
+	"os"
+	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,7 +20,7 @@ func CreateUser(data map[string]interface{}) (user model.User, err error) {
 	return
 }
 
-func Attempt(data map[string]interface{}) (user model.User, err error) {
+func Attempt(data map[string]interface{}) (user model.User, token string, err error) {
 	user, err = model.GetUserByEmail(data["email"].(string))
 	if err != nil {
 		return
@@ -25,13 +31,11 @@ func Attempt(data map[string]interface{}) (user model.User, err error) {
 		return
 	}
 
-	// // set token
-	// $tokenResult = $user->createToken(static::TOKEN_KEY);
-	// $tokenResult->token->save();
-	// $user->withAccessToken($tokenResult->accessToken);
-
-	// // set user
-	// Auth::setUser($user);
+	// set token
+	token, err = generateToken(data["email"].(string), data["password"].(string))
+	if err != nil {
+		return
+	}
 
 	return
 }
@@ -64,4 +68,40 @@ func comparePasswords(hashedPwd string, plainPwd string) bool {
 	}
 
 	return true
+}
+
+type Claims struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	jwt.StandardClaims
+}
+
+// @from https://github.com/eddycjy/go-gin-example/blob/master/pkg/util/jwt.go
+func generateToken(email, password string) (string, error) {
+	var jwtSecret []byte
+	nowTime := time.Now()
+	envExpireMin, _ := strconv.Atoi(os.Getenv("JWT_EXPIRE_MIN"))
+	expireTime := nowTime.Add(time.Duration(envExpireMin) * time.Minute)
+
+	claims := Claims{
+		encodeMD5(email),
+		encodeMD5(password),
+		jwt.StandardClaims{
+			ExpiresAt: expireTime.Unix(),
+			Issuer:    "gin-blog",
+		},
+	}
+
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := tokenClaims.SignedString(jwtSecret)
+
+	return token, err
+}
+
+// @from https://github.com/eddycjy/go-gin-example/blob/master/pkg/util/md5.go
+func encodeMD5(value string) string {
+	m := md5.New()
+	m.Write([]byte(value))
+
+	return hex.EncodeToString(m.Sum(nil))
 }

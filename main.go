@@ -3,6 +3,7 @@ package main
 import (
 	"app/controller"
 	_ "app/init"
+	"app/middleware"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,10 @@ func main() {
 	api.GET("/", controller.Index)
 	api.POST("/signup", controller.Signup)
 	api.POST("/login", controller.Login)
-	api.GET("/users/:id/info", controller.UserInfo)
+
+	api.Use(middleware.JWT())
+	{
+		api.GET("/users/:id/info", controller.UserInfo)
+	}
 	router.Run(":" + os.Getenv("APP_PORT"))
 }

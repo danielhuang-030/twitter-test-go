@@ -58,7 +58,7 @@ func Login(c *gin.Context) {
 	data = make(map[string]interface{})
 	data["email"] = requestData.Email
 	data["password"] = requestData.Password
-	user, err := service.Attempt(data)
+	user, token, err := service.Attempt(data)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"data": err.Error(),
@@ -67,6 +67,7 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": user,
+		"data":  user,
+		"token": token,
 	})
 }

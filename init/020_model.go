@@ -1,7 +1,7 @@
 package init
 
 import (
-	model "app/model"
+	"app/model"
 )
 
 func init() {
