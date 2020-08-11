@@ -23,3 +23,6 @@ vi .env
 go build
 
 ```
+
+### Dockerized
+- [README.md](https://github.com/danielhuang-030/twitter-test-go/blob/master/dockerize/README.md)
