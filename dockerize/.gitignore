@@ -1,0 +1,9 @@
+# Ignore folders
+
+twitter-test-go/
+data/mysql/*
+data/redis/*
+
+# others
+*.DS_Store
+*.code-workspace
