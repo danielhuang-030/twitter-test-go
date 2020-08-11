@@ -25,7 +25,10 @@ func ConnectDb() {
 		panic("Failed to connect to database!")
 	}
 
-	db.AutoMigrate(&User{})
+	// many to many
+	db.SetupJoinTable(&User{}, "Followers", &UserFollower{})
+
+	db.AutoMigrate(&User{}, &UserFollower{})
 }
 
 func GetDb() *gorm.DB {

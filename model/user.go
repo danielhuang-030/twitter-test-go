@@ -1,11 +1,29 @@
 package model
 
+import (
+	"time"
+
+	"gorm.io/gorm/clause"
+)
+
 type User struct {
 	Model
-	Name     string `json:"name" gorm:"size:255;index"`
-	Email    string `json:"email" gorm:"size:255;uniqueIndex"`
-	Password string `json:"-" gorm:"size:255"`
+	Name       string  `json:"name" gorm:"size:255;index"`
+	Email      string  `json:"email" gorm:"size:255;uniqueIndex"`
+	Password   string  `json:"-" gorm:"size:255"`
+	Followers  []*User `json:"followers" gorm:"many2many:user_followers;"`
+	Followings []*User `json:"followings" gorm:"many2many:user_followers;foreignKey:ID;joinForeignKey:FollowerID;References:ID;JoinReferences:UserID"`
 }
+
+type UserFollower struct {
+	UserID     uint      `json:"user_id" gorm:"unique:idx_user_follower"`
+	FollowerID uint      `json:"follower_id" gorm:"unique:idx_user_follower"`
+	CreatedAt  time.Time `json:"updated_at" gorm:"type:datetime"`
+}
+
+// func (UserFollow) BeforeCreate(db *gorm.DB) error {
+// 	return
+// }
 
 func CreateUser(data map[string]interface{}) (user User, err error) {
 	user = User{
@@ -28,7 +46,7 @@ func GetUserByEmail(email string) (user User, err error) {
 }
 
 func FindUser(id int) (user User, err error) {
-	if err = db.First(&user, id).Error; err != nil {
+	if err = db.Preload(clause.Associations).First(&user, id).Error; err != nil {
 		return
 	}
 
