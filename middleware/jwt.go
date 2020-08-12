@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"app/model"
+
 	"net/http"
 	"strings"
 
@@ -9,8 +11,8 @@ import (
 )
 
 type Claims struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	UserID uint   `json:"id"`
+	Email  string `json:"email"`
 	jwt.StandardClaims
 }
 
@@ -28,7 +30,7 @@ func JWT() gin.HandlerFunc {
 			return
 		}
 
-		_, err := parseToken(token)
+		claims, err := parseToken(token)
 		if err != nil {
 			switch err.(*jwt.ValidationError).Errors {
 			case jwt.ValidationErrorExpired:
@@ -47,6 +49,10 @@ func JWT() gin.HandlerFunc {
 				return
 			}
 		}
+
+		user, _ := model.FindUser(claims.UserID)
+		c.Set("currentUser", user)
+
 		c.Next()
 	}
 }

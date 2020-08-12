@@ -1,7 +1,8 @@
 package service
 
 import (
-	model "app/model"
+	"app/middleware"
+	"app/model"
 	"crypto/md5"
 	"encoding/hex"
 	"errors"
@@ -32,7 +33,7 @@ func Attempt(data map[string]interface{}) (user model.User, token string, err er
 	}
 
 	// set token
-	token, err = generateToken(data["email"].(string), data["password"].(string))
+	token, err = generateToken(user.ID, data["email"].(string))
 	if err != nil {
 		return
 	}
@@ -70,22 +71,16 @@ func comparePasswords(hashedPwd string, plainPwd string) bool {
 	return true
 }
 
-type Claims struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	jwt.StandardClaims
-}
-
 // @from https://github.com/eddycjy/go-gin-example/blob/master/pkg/util/jwt.go
-func generateToken(email, password string) (string, error) {
+func generateToken(id uint, email string) (string, error) {
 	var jwtSecret []byte
 	nowTime := time.Now()
 	envExpireMin, _ := strconv.Atoi(os.Getenv("JWT_EXPIRE_MIN"))
 	expireTime := nowTime.Add(time.Duration(envExpireMin) * time.Minute)
 
-	claims := Claims{
+	claims := middleware.Claims{
+		id,
 		encodeMD5(email),
-		encodeMD5(password),
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "gin-blog",

@@ -9,8 +9,8 @@ import (
 )
 
 func UserInfo(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := service.GetUserInfo(id)
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+	user, err := service.GetUserInfo(uint(id))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"data": err.Error(),

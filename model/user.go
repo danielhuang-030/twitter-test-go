@@ -31,7 +31,7 @@ func CreateUser(data map[string]interface{}) (user User, err error) {
 		Email:    data["email"].(string),
 		Password: data["password"].(string),
 	}
-	if err = db.Create(&user).Error; err != nil {
+	if err = db.Omit(clause.Associations).Create(&user).Error; err != nil {
 		return
 	}
 	return
@@ -45,10 +45,14 @@ func GetUserByEmail(email string) (user User, err error) {
 	return
 }
 
-func FindUser(id int) (user User, err error) {
+func FindUser(id uint) (user User, err error) {
 	if err = db.Preload(clause.Associations).First(&user, id).Error; err != nil {
 		return
 	}
 
 	return
+}
+
+func GreateFollower(user User, follower User) error {
+	return db.Model(&user).Association("Followers").Append(follower)
 }

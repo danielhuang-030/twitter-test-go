@@ -19,6 +19,7 @@ func main() {
 	api.Use(middleware.JWT())
 	{
 		api.GET("/users/:id/info", controller.UserInfo)
+		api.POST("/following", controller.CreateFollow)
 	}
 	router.Run(":" + os.Getenv("APP_PORT"))
 }
