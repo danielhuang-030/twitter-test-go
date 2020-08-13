@@ -54,5 +54,5 @@ func FindUser(id uint) (user User, err error) {
 }
 
 func GreateFollower(user User, follower User) error {
-	return db.Model(&user).Association("Followers").Append(follower)
+	return db.Model(&user).Association("Followers").Append(&follower)
 }

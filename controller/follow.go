@@ -28,6 +28,6 @@ func CreateFollow(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": err,
+		"message": "Successfully followed user!",
 	})
 }
