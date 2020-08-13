@@ -13,7 +13,7 @@ func UserInfo(c *gin.Context) {
 	user, err := service.GetUserInfo(uint(id))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"data": err.Error(),
+			"message": err.Error(),
 		})
 		return
 	}

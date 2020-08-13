@@ -34,7 +34,7 @@ func Signup(c *gin.Context) {
 	user, err := service.CreateUser(data)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"data": err.Error(),
+			"message": err.Error(),
 		})
 		return
 	}
@@ -49,7 +49,7 @@ func Login(c *gin.Context) {
 	var requestData LoginRequest
 	if err := c.ShouldBindJSON(&requestData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"data": err.Error(),
+			"message": err.Error(),
 		})
 		return
 	}
@@ -61,7 +61,7 @@ func Login(c *gin.Context) {
 	user, token, err := service.Attempt(data)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"data": err.Error(),
+			"message": err.Error(),
 		})
 		return
 	}

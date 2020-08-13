@@ -53,6 +53,10 @@ func FindUser(id uint) (user User, err error) {
 	return
 }
 
-func GreateFollower(user User, follower User) error {
+func CreateFollower(user User, follower User) error {
 	return db.Model(&user).Association("Followers").Append(&follower)
+}
+
+func DeleteFollower(user User, follower User) error {
+	return db.Model(&user).Association("Followers").Delete(&follower)
 }
