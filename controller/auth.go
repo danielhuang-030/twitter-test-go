@@ -2,6 +2,7 @@ package controller
 
 import (
 	"app/service"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,10 +20,15 @@ type LoginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type userResponse struct {
+}
+
 func Signup(c *gin.Context) {
 	var requestData SignupRequest
 	if err := c.ShouldBindJSON(&requestData); err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -39,10 +45,7 @@ func Signup(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data": user,
-	})
-
+	c.JSON(http.StatusOK, user)
 }
 
 func Login(c *gin.Context) {
@@ -66,8 +69,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"data":  user,
-		"token": token,
-	})
+	// response with token
+	userJSON, _ := json.Marshal(user)
+	userMap := make(map[string]interface{})
+	json.Unmarshal(userJSON, &userMap)
+	userMap["token"] = token
+
+	c.JSON(http.StatusOK, userMap)
 }

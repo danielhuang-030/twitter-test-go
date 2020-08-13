@@ -23,7 +23,7 @@ func JWT() gin.HandlerFunc {
 		token := splitToken[1]
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"data": "You do not have enough permissions to perform this operation.",
+				"message": "You do not have enough permissions to perform this operation.",
 			})
 
 			c.Abort()
@@ -35,14 +35,14 @@ func JWT() gin.HandlerFunc {
 			switch err.(*jwt.ValidationError).Errors {
 			case jwt.ValidationErrorExpired:
 				c.JSON(http.StatusUnauthorized, gin.H{
-					"data": "The certificate has expired.",
+					"message": "The certificate has expired.",
 				})
 
 				c.Abort()
 				return
 			default:
 				c.JSON(http.StatusUnauthorized, gin.H{
-					"data": "Credential verification failed.",
+					"message": "Credential verification failed.",
 				})
 
 				c.Abort()

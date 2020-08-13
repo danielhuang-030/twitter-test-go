@@ -11,8 +11,8 @@ type User struct {
 	Name       string  `json:"name" gorm:"size:255;index"`
 	Email      string  `json:"email" gorm:"size:255;uniqueIndex"`
 	Password   string  `json:"-" gorm:"size:255"`
-	Followers  []*User `json:"followers" gorm:"many2many:user_followers;"`
-	Followings []*User `json:"followings" gorm:"many2many:user_followers;foreignKey:ID;joinForeignKey:FollowerID;References:ID;JoinReferences:UserID"`
+	Followers  []*User `json:"followers,omitempty" gorm:"many2many:user_followers;"`
+	Followings []*User `json:"followings,omitempty" gorm:"many2many:user_followers;foreignKey:ID;joinForeignKey:FollowerID;References:ID;JoinReferences:UserID"`
 }
 
 type UserFollower struct {
