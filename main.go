@@ -21,6 +21,7 @@ func main() {
 		api.GET("/users/:id/info", controller.UserInfo)
 		api.POST("/following", controller.CreateFollow)
 		api.DELETE("/following/:id", controller.DeleteFollow)
+		api.POST("/posts", controller.CreatePost)
 	}
 	router.Run(":" + os.Getenv("APP_PORT"))
 }

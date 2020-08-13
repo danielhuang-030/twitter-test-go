@@ -13,6 +13,7 @@ type User struct {
 	Password   string  `json:"-" gorm:"size:255"`
 	Followers  []*User `json:"followers,omitempty" gorm:"many2many:user_followers;"`
 	Followings []*User `json:"followings,omitempty" gorm:"many2many:user_followers;foreignKey:ID;joinForeignKey:FollowerID;References:ID;JoinReferences:UserID"`
+	Posts      []Post  `json:"posts,omitempty"`
 }
 
 type UserFollower struct {

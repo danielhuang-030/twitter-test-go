@@ -28,7 +28,7 @@ func ConnectDb() {
 	// many to many
 	db.SetupJoinTable(&User{}, "Followers", &UserFollower{})
 
-	db.AutoMigrate(&User{}, &UserFollower{})
+	db.AutoMigrate(&User{}, &UserFollower{}, &Post{})
 }
 
 func GetDb() *gorm.DB {
