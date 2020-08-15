@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"app/model"
+	"os"
 
 	"net/http"
 	"strings"
@@ -79,7 +80,7 @@ func JWT() gin.HandlerFunc {
 
 // @from https://github.com/eddycjy/go-gin-example/blob/master/pkg/util/jwt.go
 func ParseToken(token string) (*Claims, error) {
-	var jwtSecret []byte
+	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})

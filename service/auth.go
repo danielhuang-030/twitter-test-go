@@ -81,7 +81,7 @@ func comparePasswords(hashedPwd string, plainPwd string) bool {
 
 // @from https://github.com/eddycjy/go-gin-example/blob/master/pkg/util/jwt.go
 func generateToken(id uint, email string) (string, error) {
-	var jwtSecret []byte
+	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	nowTime := time.Now()
 	envExpireMin, _ := strconv.Atoi(os.Getenv("JWT_EXPIRE_MIN"))
 	expireTime := nowTime.Add(time.Duration(envExpireMin) * time.Minute)
