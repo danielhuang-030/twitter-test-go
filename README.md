@@ -7,7 +7,8 @@ Go implementation version of [twitter-test](https://github.com/danielhuang-030/t
 - [gin-gonic/gin](https://github.com/gin-gonic/gin) - Gin Web Framework
 - [go-gorm/gorm](https://github.com/go-gorm/gorm) - GORM v2
 - [joho/godotenv](https://github.com/joho/godotenv) - GoDotEnv
-- [dgrijalva/jwt-go ](https://github.com/dgrijalva/jwt-go) - jwt-go
+- [dgrijalva/jwt-go](https://github.com/dgrijalva/jwt-go) - jwt-go
+- [go-redis/redis](https://github.com/go-redis/redis) - Redis client for Golang
 
 ### Installation
 
