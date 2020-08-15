@@ -41,6 +41,14 @@ func Attempt(data map[string]interface{}) (user model.User, token string, err er
 	return
 }
 
+func Logout(token string, expireAt int64) (err error) {
+	err = model.CreateBlacklistToken(token, expireAt)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func hashAndSalt(pwd string) string {
 
 	// Use GenerateFromPassword to hash & salt pwd

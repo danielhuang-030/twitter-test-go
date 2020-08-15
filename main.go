@@ -18,6 +18,7 @@ func main() {
 
 	api.Use(middleware.JWT())
 	{
+		api.GET("/logout", controller.Logout)
 		api.GET("/users/:id/info", controller.UserInfo)
 		api.GET("/users/:id/followers", controller.UserFollowers)
 		api.GET("/users/:id/following", controller.UserFollowing)

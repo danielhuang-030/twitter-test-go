@@ -7,4 +7,7 @@ import (
 func init() {
 	// connect DB
 	model.ConnectDb()
+
+	// connect RDB
+	model.ConnectRdb()
 }

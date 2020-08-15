@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -15,7 +16,10 @@ type Model struct {
 	UpdatedAt time.Time `json:"updated_at" gorm:"type:datetime"`
 }
 
-var db *gorm.DB
+var (
+	db  *gorm.DB
+	rdb *redis.Client
+)
 
 func ConnectDb() {
 	var err error
@@ -36,4 +40,19 @@ func GetDb() *gorm.DB {
 		ConnectDb()
 	}
 	return db
+}
+
+func ConnectRdb() {
+	opt, err := redis.ParseURL(fmt.Sprintf("redis://%s:%s/%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT"), os.Getenv("REDIS_DB")))
+	if err != nil {
+		panic(err)
+	}
+	rdb = redis.NewClient(opt)
+}
+
+func GetRdb() *redis.Client {
+	if rdb == nil {
+		ConnectRdb()
+	}
+	return rdb
 }

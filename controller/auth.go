@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"app/middleware"
 	"app/service"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -76,4 +78,21 @@ func Login(c *gin.Context) {
 	userMap["token"] = token
 
 	c.JSON(http.StatusOK, userMap)
+}
+
+func Logout(c *gin.Context) {
+	splitToken := strings.Split(c.GetHeader("Authorization"), "Bearer ")
+	token := splitToken[1]
+	claims, _ := middleware.ParseToken(token)
+	err := service.Logout(token, claims.ExpiresAt)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Successfully logged out",
+	})
 }
