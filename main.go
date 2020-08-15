@@ -19,6 +19,8 @@ func main() {
 	api.Use(middleware.JWT())
 	{
 		api.GET("/users/:id/info", controller.UserInfo)
+		api.GET("/users/:id/followers", controller.UserFollowers)
+		api.GET("/users/:id/following", controller.UserFollowing)
 		api.POST("/following", controller.CreateFollow)
 		api.DELETE("/following/:id", controller.DeleteFollow)
 		api.GET("/posts/:id", controller.ShowPost)

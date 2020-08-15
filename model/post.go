@@ -6,6 +6,10 @@ type Post struct {
 	Content string `json:"content" gorm:"type:text"`
 }
 
+// func (Post) BeforeCreate(db *gorm.DB) error {
+// 	return
+// }
+
 func CreatePost(data map[string]interface{}, user User) (post Post, err error) {
 	post = Post{
 		Content: data["content"].(string),

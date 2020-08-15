@@ -22,10 +22,6 @@ type UserFollower struct {
 	CreatedAt  time.Time `json:"updated_at" gorm:"type:datetime"`
 }
 
-// func (UserFollow) BeforeCreate(db *gorm.DB) error {
-// 	return
-// }
-
 func CreateUser(data map[string]interface{}) (user User, err error) {
 	user = User{
 		Name:     data["name"].(string),
@@ -47,7 +43,7 @@ func GetUserByEmail(email string) (user User, err error) {
 }
 
 func FindUser(id uint) (user User, err error) {
-	if err = db.Preload(clause.Associations).First(&user, id).Error; err != nil {
+	if err = db. /*.Preload(clause.Associations)*/ First(&user, id).Error; err != nil {
 		return
 	}
 
@@ -60,4 +56,30 @@ func CreateFollower(user User, follower User) error {
 
 func DeleteFollower(user User, follower User) error {
 	return db.Model(&user).Association("Followers").Delete(&follower)
+}
+
+func GetUserFollowers(id uint) (users []*User, err error) {
+	user := User{}
+	users = []*User{}
+	if err = db.Preload("Followers").First(&user, id).Error; err != nil {
+		return
+	}
+	if len(user.Followers) == 0 {
+		return
+	}
+	users = user.Followers
+	return
+}
+
+func GetUserFollowings(id uint) (users []*User, err error) {
+	user := User{}
+	users = []*User{}
+	if err = db.Preload("Followings").First(&user, id).Error; err != nil {
+		return
+	}
+	if len(user.Followings) == 0 {
+		return
+	}
+	users = user.Followings
+	return
 }

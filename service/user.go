@@ -11,3 +11,21 @@ func GetUserInfo(id uint) (user model.User, err error) {
 	}
 	return
 }
+
+func GetUserFollowers(id uint) (users []*model.User, err error) {
+	users, err = model.GetUserFollowers(id)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func GetUserFollowings(id uint) (users []*model.User, err error) {
+	users, err = model.GetUserFollowings(id)
+	if err != nil {
+		return
+	}
+
+	return
+}
