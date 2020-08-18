@@ -5,8 +5,7 @@ import (
 )
 
 func CreateFollower(id uint, currentUser interface{}) (err error) {
-	var user model.User
-	user, err = model.FindUser(id)
+	user, err := model.FindUser(id)
 	if err != nil {
 		return
 	}
@@ -14,8 +13,7 @@ func CreateFollower(id uint, currentUser interface{}) (err error) {
 }
 
 func DeleteFollower(id uint, currentUser interface{}) (err error) {
-	var user model.User
-	user, err = model.FindUser(id)
+	user, err := model.FindUser(id)
 	if err != nil {
 		return
 	}
