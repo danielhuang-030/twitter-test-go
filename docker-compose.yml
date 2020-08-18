@@ -65,6 +65,8 @@ services:
         image: erikdubbelboer/phpredisadmin:latest
         container_name: app-pra
         restart: always
+        volumes:
+            - ./dockerize/conf/phpRedisAdmin/config.sample.inc.php:/src/app/includes/config.sample.inc.php
         ports:
             - "12011:80"
         environment:
